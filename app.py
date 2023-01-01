@@ -49,7 +49,25 @@ def video():
                 break
     return render_template("vidoe.html")        
         
-
+# route the app to the webcam detection page
+@app.route("/webcam")
+def webcam():
+    cap = cv2.VideoCapture(0)
+    while cap.isOpened():
+        ret, image = cap.read()
+        if ret:
+            image = imutils.resize(image, width=min(500, image.shape[1]))
+            regions, _ = hog.detectMultiScale(image, winStride=(4, 4), padding=(8, 8), scale=1.05)
+            for (x, y, w, h) in regions:
+                cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+            cv2.putText(image, f"Total Persons: {len(regions)}", (20, 315), cv2.FONT_ITALIC, 0.5, (0, 0, 255), 1)
+            cv2.imshow("Human Detection from Webcam", image)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                cv2.destroyAllWindows()
+                break
+        else:
+            break
+    return render_template("webcam.html")
             
 
 
