@@ -27,4 +27,32 @@ def image():
     cv2.imshow("Human Detection from an Image", image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    return render_template("image.html")   
+    return render_template("image.html")
+
+# route the app to the vidoe detection page    
+@app.route("/video")
+def video():
+    cap = cv2.VideoCapture("video.mp4")
+    while cap.isOpened():
+        ret, image = cap.read()
+        if ret:
+            image = imutils.resize(image, width=min(500, image.shape[1]))
+            regions, _ = hog.detectMultiScale(image, winStride=(4, 4), padding=(4, 4), scale = 1.05)
+            for (x, y, w, h) in regions:
+                cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+            cv2.putText(image, f"Total Persons: {len(regions)}", (20, 315), cv2.FONT_ITALIC, 0.5, (0, 0,255), 1)
+            cv2.imshow("Human Detection from Video", image)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                cv2.destroyAllWindows()
+                break
+            else:
+                break
+    return render_template("vidoe.html")        
+        
+
+            
+
+
+# run the app
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
