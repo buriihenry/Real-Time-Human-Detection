@@ -18,7 +18,7 @@ def home():
 # route the app to the image detection page
 @app.route("/image")
 def image():
-    image = cv2.imread("family.jpg")
+    image = cv2.imread("family5.jpg")
     image = imutils.resize(image, width=min(500, image.shape[1]))
     regions, _ = hog.detectMultiScale(image, winStride=(4, 4), padding=(4, 4), scale = 1.05)
     for (x, y, w, h) in regions:
@@ -37,17 +37,17 @@ def video():
         ret, image = cap.read()
         if ret:
             image = imutils.resize(image, width=min(500, image.shape[1]))
-            regions, _ = hog.detectMultiScale(image, winStride=(4, 4), padding=(4, 4), scale = 1.05)
+            regions, _ = hog.detectMultiScale(image, winStride=(4, 4), padding=(4, 4), scale=1.05)
             for (x, y, w, h) in regions:
                 cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
-            cv2.putText(image, f"Total Persons: {len(regions)}", (20, 315), cv2.FONT_ITALIC, 0.5, (0, 0,255), 1)
+            cv2.putText(image, f"Total Persons: {len(regions)}", (20, 250), cv2.FONT_ITALIC, 0.5, (0, 0, 255), 1)
             cv2.imshow("Human Detection from Video", image)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 cv2.destroyAllWindows()
                 break
-            else:
-                break
-    return render_template("vidoe.html")        
+        else:
+            break
+    return render_template("video.html")      
         
 # route the app to the webcam detection page
 @app.route("/webcam")
