@@ -18,7 +18,7 @@ def home():
 # route the app to the image detection page
 @app.route("/image")
 def image():
-    image = cv2.imread("image.jpg")
+    image = cv2.imread("family.jpg")
     image = imutils.resize(image, width=min(500, image.shape[1]))
     regions, _ = hog.detectMultiScale(image, winStride=(4, 4), padding=(4, 4), scale = 1.05)
     for (x, y, w, h) in regions:
